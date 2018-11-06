@@ -7,7 +7,7 @@ from tools import default
 
 config = default.get("config.json")
 
-print(f"{config.name} by lyricalpaws running!")
+print(f"{config.name} by {config.owner} running!")
 
 
 async def run():
