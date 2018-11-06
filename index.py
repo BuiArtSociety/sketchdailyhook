@@ -13,7 +13,7 @@ print(f"{config.name} by {config.owner} running!")
 async def run():
     credentials = {"user": config.dbname, "password": config.dbpass, "database": config.database, "host": "127.0.0.1"}
     db = await asyncpg.create_pool(**credentials)
-    await db.execute("CREATE TABLE IF NOT EXISTS sketchdaily(artist varchar, idea varchar);")
+    await db.execute("CREATE TABLE IF NOT EXISTS sketchdaily(code int, artist varchar, idea varchar);")
 
 loop = asyncio.get_event_loop()
 loop.run_until_complete(run())
