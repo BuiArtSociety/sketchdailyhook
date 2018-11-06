@@ -1,0 +1,7 @@
+{
+  "name": "Webhooker",
+  "webhookurl": "WEBHOOK URL HERE",
+  "database": "DATABASE",
+  "dbname": "DATABASE USERNAME",
+  "dbpass": "DATABASE PASSWORD"
+}
