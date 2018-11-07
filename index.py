@@ -15,17 +15,23 @@ async def run():
     db = await asyncpg.create_pool(**credentials)
     await db.execute("CREATE TABLE IF NOT EXISTS sketchdaily(code int, artist varchar, idea varchar);")
 
+    while True:
+        now = datetime.datetime.utcnow()
+        dayandmonth = datetime.date.today()
+        if now.hour is 23 and now.minute is 0:
+            row = await db.fetchrow("SELECT * FROM sketchdaily ORDER BY RANDOM() LIMIT 1;")
+            if row is None:
+                return print("There are no suggestions...")
+            print('True, sending webhook message')
+            webhook = DiscordWebhook(url=f'{config.webhookurl}', content=f"@sketchdaily\n\nThe prompt for {dayandmonth.day}/{dayandmonth.month}/{dayandmonth.year} is:\n\n**{row['idea']}**\n\nIt was suggested by **{row['artist']}**\n\nPlease post your submission below this line!\n\n===================")
+            webhook.execute()
+            sketchcode = row['code']
+            query = "DELETE FROM sketchdaily WHERE code=$1;"
+            await db.execute(query, sketchcode)
+            time.sleep(60)
+        else:
+            time.sleep(15)
+
+
 loop = asyncio.get_event_loop()
 loop.run_until_complete(run())
-
-while True:
-    now = datetime.datetime.utcnow()
-
-    if now.hour is 00 and now.minute is 29:
-        print('True')
-        webhook = DiscordWebhook(url=f'{config.webhookurl}', content='Webhook Message')
-        webhook.execute()
-        time.sleep(60)
-    else:
-        print('False')
-        time.sleep(15)
