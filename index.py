@@ -18,7 +18,7 @@ async def run():
     while True:
         now = datetime.datetime.utcnow()
         dayandmonth = datetime.date.today()
-        if now.hour is 23 and now.minute is 0:
+        if now.hour is 15 and now.minute is 00:
             row = await db.fetchrow("SELECT * FROM sketchdaily ORDER BY RANDOM() LIMIT 1;")
             if row is None:
                 return print("There are no suggestions...")
